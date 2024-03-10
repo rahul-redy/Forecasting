@@ -1,0 +1,9 @@
+ubar_eastward,vbar_northward		Barotropic velocity		Barotrop. vel.
+u_sur_eastward,v_sur_northward 		Velocity at the surface		Surf. vel. 
+u_bot_eastward,v_bot_northward		Velocity at the bottom		Bottom vel.
+Uwind_eastward,Vwind_northward		Wind velocity			Wind vel.
+zeta					Water level			Water lvl.	
+Hwave					Wave amplitude			Hm0		
+temp_sur				Surface temperature		SST		
+salt_sur				Surface salinity		SSS		
+
