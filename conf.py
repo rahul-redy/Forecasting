@@ -1,5 +1,5 @@
 from browser import window
-import html as HTML
+from urllib.parse import unquote
 import datetime
 
 
@@ -98,8 +98,8 @@ class Conf:
 
             for basemap in basemaps:
                 tempBasemap = {'name': basemap.getElementsByTagName('name')[0].innerHTML,
-                               'url':  HTML.unescape(basemap.getElementsByTagName('url')[0].innerHTML),
-                               'layer':HTML.unescape(basemap.getElementsByTagName('layer')[0].innerHTML),
+                               'url':  unquote(basemap.getElementsByTagName('url')[0].innerHTML),
+                               'layer':unquote(basemap.getElementsByTagName('layer')[0].innerHTML),
                               }
                 self.basemaps += [tempBasemap]
 
@@ -118,9 +118,9 @@ class Conf:
 
             for server in wmsServers:
                 tempBasemap = {'name':            server.getElementsByTagName('name')[0].innerHTML,
-                               'url':             HTML.unescape(server.getElementsByTagName('url'            )[0].innerHTML),
-                               'featureinforeq':  HTML.unescape(server.getElementsByTagName('featureinforeq' )[0].innerHTML),
-                               'capabilitiesreq': HTML.unescape(server.getElementsByTagName('capabilitiesreq')[0].innerHTML),
+                               'url':             unquote(server.getElementsByTagName('url'            )[0].innerHTML),
+                               'featureinforeq':  unquote(server.getElementsByTagName('featureinforeq' )[0].innerHTML),
+                               'capabilitiesreq': unquote(server.getElementsByTagName('capabilitiesreq')[0].innerHTML),
                                'type':            'wms',
                               }
                 self.wmsServers += [tempBasemap]
@@ -139,7 +139,7 @@ class Conf:
 
             for server in dapServers:
                 timesVarName = server.getElementsByTagName('time')[0].innerHTML
-                url = HTML.unescape(server.getElementsByTagName('url')[0].innerHTML)
+                url = unquote(server.getElementsByTagName('url')[0].innerHTML)
 
 
                 # Read the meshes.
@@ -153,8 +153,8 @@ class Conf:
                         gridFloatBytes = 64
                     gridLat, gridLon = grid.innerHTML.split(',')
 
-#                     keyLon  = window.loadBinaryDODSFloat64ToCache(HTML.unescape(url.format(strTime = srtTime) + '?' + gridLat.strip() ))
-#                     keyLat  = window.loadBinaryDODSFloat64ToCache(HTML.unescape(url.format(strTime = srtTime) + '?' + gridLon.strip() ))
+#                     keyLon  = window.loadBinaryDODSFloat64ToCache(unquote(url.format(strTime = srtTime) + '?' + gridLat.strip() ))
+#                     keyLat  = window.loadBinaryDODSFloat64ToCache(unquote(url.format(strTime = srtTime) + '?' + gridLon.strip() ))
                     grids[gridName] = [gridLat, gridLon, gridFloatBytes]
 
 #                 # Parameters to convert the netCDF times into standard times.

@@ -3,8 +3,6 @@ import javascript
 import struct
 import datetime
 
-import html as HTML
-
 from dateGizmo  import *
 from depthGizmo import *
 from colorBar   import *
