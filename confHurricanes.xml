@@ -472,21 +472,6 @@
 
     <layers>
 
-<!--        <layer>-->
-<!--            <server>L2</server>-->
-<!--            <servertype>dap</servertype>-->
-<!--            <layertype>dynmap</layertype>-->
-<!--            <gridtype>rho</gridtype>-->
-<!--            <name>zeta</name>-->
-<!--            <varthreshold>1110.0</varthreshold>-->
-<!--            <varscale>1.0</varscale>-->
-<!--            <longname>Free surface (m)</longname>-->
-<!--            <colorbar>zeta</colorbar>-->
-<!--            <visible>True</visible>-->
-<!--            <transparent>True</transparent>-->
-<!--        </layer>-->
-
-
 
 
         <layer>
@@ -498,7 +483,7 @@
             <varthreshold>12.0</varthreshold>
             <varscale>12.0</varscale>
             <longname>Damage level</longname>
-            <shortname>Damage.</shortname>
+            <shortname>Damage</shortname>
             <units>m/s</units>
             <colorbar>risk</colorbar>
             <visible>False</visible>
@@ -506,7 +491,41 @@
         </layer>
 
         <layer>
-            <server>L1 NYBIGHT,L1 GOMSAB,L0</server>
+            <server>L1 NYBIGHT</server>
+            <servertype>dap</servertype>
+            <layertype>dynmap</layertype>
+            <gridtype>rho,rho</gridtype>
+            <name>u_sur_eastward,v_sur_northward</name>
+            <varthreshold>12.0</varthreshold>
+            <varscale>12.0</varscale>
+            <longname>Surface currents</longname>
+            <shortname>Srfc. curr.</shortname>
+            <units>m/s</units>
+            <colorbar>velocity</colorbar>
+            <visible>False</visible>
+            <transparent>True</transparent>
+        </layer>
+
+
+        <layer>
+            <server>L1 GOMSAB</server>
+            <servertype>dap</servertype>
+            <layertype>dynmap</layertype>
+            <gridtype>rho,rho</gridtype>
+            <name>u_sur_eastward,v_sur_northward</name>
+            <varthreshold>12.0</varthreshold>
+            <varscale>12.0</varscale>
+            <longname>Surface currents</longname>
+            <shortname>Srfc. curr.</shortname>
+            <units>m/s</units>
+            <colorbar>velocity</colorbar>
+            <visible>False</visible>
+            <transparent>True</transparent>
+        </layer>
+
+
+        <layer>
+            <server>L0</server>
             <servertype>dap</servertype>
             <layertype>dynmap</layertype>
             <gridtype>rho,rho</gridtype>
@@ -522,7 +541,39 @@
         </layer>
 
         <layer>
-            <server>L1 NYBIGHT,L1 GOMSAB,L0</server>
+            <server>L1 NYBIGHT</server>
+            <servertype>dap</servertype>
+            <layertype>dynmap</layertype>
+            <gridtype>rho</gridtype>
+            <name>zeta</name>
+            <varthresholdmin>-1.89</varthresholdmin>
+            <varthresholdmax>100</varthresholdmax>
+            <varscale>1.0</varscale>
+            <longname>Water level</longname>
+            <shortname>Water lvl.</shortname>
+            <units>m</units>
+            <colorbar>zeta</colorbar>
+            <visible>False</visible>
+            <transparent>True</transparent>
+        </layer>
+        <layer>
+            <server>L1 GOMSAB</server>
+            <servertype>dap</servertype>
+            <layertype>dynmap</layertype>
+            <gridtype>rho</gridtype>
+            <name>zeta</name>
+            <varthresholdmin>-1.89</varthresholdmin>
+            <varthresholdmax>100</varthresholdmax>
+            <varscale>1.0</varscale>
+            <longname>Water level</longname>
+            <shortname>Water lvl.</shortname>
+            <units>m</units>
+            <colorbar>zeta</colorbar>
+            <visible>False</visible>
+            <transparent>True</transparent>
+        </layer>
+        <layer>
+            <server>L0</server>
             <servertype>dap</servertype>
             <layertype>dynmap</layertype>
             <gridtype>rho</gridtype>
@@ -539,7 +590,39 @@
         </layer>
 
         <layer>
-            <server>L1 NYBIGHT,L1 GOMSAB,L0</server>
+            <server>L0</server>
+            <servertype>dap</servertype>
+            <layertype>dynmap</layertype>
+            <gridtype>rho</gridtype>
+            <name>Hwave</name>
+            <varthresholdmin>-1.89</varthresholdmin>
+            <varthresholdmax>100</varthresholdmax>
+            <varscale>1.0</varscale>
+            <longname>Wave amplitude</longname>
+            <shortname>Hm0</shortname>
+            <units>m</units>
+            <colorbar>Hm0</colorbar>
+            <visible>False</visible>
+            <transparent>True</transparent>
+        </layer>
+        <layer>
+            <server>L1 GOMSAB</server>
+            <servertype>dap</servertype>
+            <layertype>dynmap</layertype>
+            <gridtype>rho</gridtype>
+            <name>Hwave</name>
+            <varthresholdmin>-1.89</varthresholdmin>
+            <varthresholdmax>100</varthresholdmax>
+            <varscale>1.0</varscale>
+            <longname>Wave amplitude</longname>
+            <shortname>Hm0</shortname>
+            <units>m</units>
+            <colorbar>Hm0</colorbar>
+            <visible>False</visible>
+            <transparent>True</transparent>
+        </layer>
+        <layer>
+            <server>L1 NYBIGHT</server>
             <servertype>dap</servertype>
             <layertype>dynmap</layertype>
             <gridtype>rho</gridtype>
@@ -556,36 +639,13 @@
         </layer>
 
 
-        <!--        <layer>-->
-<!--            <server>L0</server>-->
-<!--            <servertype>dap</servertype>-->
-<!--            <layertype>dynmap</layertype>-->
-<!--            <gridtype>rho</gridtype>-->
-<!--            <name>zeta</name>-->
-<!--            <varthreshold>1110.0</varthreshold>-->
-<!--            <varscale>1.0</varscale>-->
-<!--            <longname>Water level (m)</longname>-->
-<!--            <colorbar>zeta</colorbar>-->
-<!--            <visible>True</visible>-->
-<!--            <transparent>True</transparent>-->
-<!--        </layer>-->
 
-<!--        <layer>-->
-<!--            <server>L0</server>-->
-<!--            <servertype>dap</servertype>-->
-<!--            <layertype>dynmap</layertype>-->
-<!--            <gridtype>rho</gridtype>-->
-<!--            <name>hwave</name>-->
-<!--            <varthreshold>1110.0</varthreshold>-->
-<!--            <varscale>1.0</varscale>-->
-<!--            <longname>Hmo (m)</longname>-->
-<!--            <colorbar>zeta</colorbar>-->
-<!--            <visible>False</visible>-->
-<!--            <transparent>True</transparent>-->
-<!--        </layer>-->
 
-        <layer>
-            <server>L1 NYBIGHT,L1 GOMSAB,L0</server>
+       
+
+
+                <layer>
+            <server>L0</server>
             <servertype>dap</servertype>
             <layertype>dynmap</layertype>
             <gridtype>rho</gridtype>
@@ -598,11 +658,48 @@
             <colorbar>temperature</colorbar>
             <visible>False</visible>
             <transparent>True</transparent>
+    
+        </layer>
+
+
+                <layer>
+            <server>L1 GOMSAB</server>
+            <servertype>dap</servertype>
+            <layertype>dynmap</layertype>
+            <gridtype>rho</gridtype>
+            <name>temp_sur</name>
+            <varthreshold>1110.0</varthreshold>
+            <varscale>1.0</varscale>
+            <longname>Surface temperature</longname>
+            <shortname>SST</shortname>
+            <units>°C</units>
+            <colorbar>temperature</colorbar>
+            <visible>False</visible>
+            <transparent>True</transparent>
+    
+        </layer>
+
+
+                <layer>
+            <server>L1 NYBIGHT</server>
+            <servertype>dap</servertype>
+            <layertype>dynmap</layertype>
+            <gridtype>rho</gridtype>
+            <name>temp_sur</name>
+            <varthreshold>1110.0</varthreshold>
+            <varscale>1.0</varscale>
+            <longname>Surface temperature</longname>
+            <shortname>SST</shortname>
+            <units>°C</units>
+            <colorbar>temperature</colorbar>
+            <visible>False</visible>
+            <transparent>True</transparent>
+    
         </layer>
 
 
         <layer>
-            <server>L1 NYBIGHT,L1 GOMSAB,L0</server>
+            <server>L1 NYBIGHT</server>
             <servertype>dap</servertype>
             <layertype>dynmap</layertype>
             <gridtype>rho</gridtype>
@@ -618,37 +715,41 @@
         </layer>
 
 
-<!--        <layer>-->
-<!--            <server>atmosphericforcing</server>-->
-<!--            <servertype>dap</servertype>-->
-<!--            <layertype>dynmap</layertype>-->
-<!--            <gridtype>rho</gridtype>-->
-<!--            <name>Qair</name>-->
-<!--            <varthreshold>1110.0</varthreshold>-->
-<!--            <varscale>1.0</varscale>-->
-<!--            <longname>Air humidity</longname>-->
-<!--            <colorbar>Qair</colorbar>-->
-<!--            <visible>True</visible>-->
-<!--            <transparent>True</transparent>-->
-<!--        </layer>-->
+
+
+        <layer>
+            <server>L1 GOMSAB</server>
+            <servertype>dap</servertype>
+            <layertype>dynmap</layertype>
+            <gridtype>rho</gridtype>
+            <name>salt_sur</name>
+            <varthreshold>1110.0</varthreshold>
+            <varscale>1.0</varscale>
+            <longname>Surface salinity</longname>
+            <shortname>SSS</shortname>
+            <units></units>
+            <colorbar>salinity</colorbar>
+            <visible>False</visible>
+            <transparent>True</transparent>
+        </layer>
 
 
 
-
-<!--        <layer>-->
-<!--            <server>icoast</server>-->
-<!--            <servertype>dap</servertype>-->
-<!--            <layertype>dynmap</layertype>-->
-<!--            <gridtype>rho</gridtype>-->
-<!--            <name>zeta</name>-->
-<!--            <varthreshold>200.0</varthreshold>-->
-<!--            <varscale>0.0</varscale>-->
-<!--            <longname>Water level</longname>-->
-<!--            <colorbar>zeta</colorbar>-->
-<!--            <visible>True</visible>-->
-<!--            <transparent>True</transparent>-->
-<!--        </layer>-->
-
+        <layer>
+            <server>L0</server>
+            <servertype>dap</servertype>
+            <layertype>dynmap</layertype>
+            <gridtype>rho</gridtype>
+            <name>salt_sur</name>
+            <varthreshold>1110.0</varthreshold>
+            <varscale>1.0</varscale>
+            <longname>Surface salinity</longname>
+            <shortname>SSS</shortname>
+            <units></units>
+            <colorbar>salinity</colorbar>
+            <visible>False</visible>
+            <transparent>True</transparent>
+        </layer>
 
 
 

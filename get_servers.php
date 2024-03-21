@@ -1,5 +1,28 @@
 <?php
 
+
+function extractVariablesFromLayers($xml, $existingServers)
+{
+    // Define an array to store variables for each server
+    $serverVariables = array();
+
+    // Iterate through each <layer> element
+    foreach ($xml->xpath('//layers/layer') as $layer) {
+        $serverName = (string)$layer->server;
+        $variableName = (string)$layer->name;
+
+        // Check if the server name exists in the existing servers array
+        foreach ($existingServers as &$server) {
+            if ($server['name'] === $serverName) {
+                // Append the variable to the server's variables array
+                $server['variables'][] = $variableName;
+            }
+        }
+    }
+
+    return $existingServers;
+}
+
 // Check if the loadedCode parameter is present in the URL
 if (isset($_GET['loadedCode'])) {
     $loadedCode = $_GET['loadedCode'];
@@ -24,14 +47,10 @@ if (isset($_GET['loadedCode'])) {
             $serverURL = (string)$server->url;
 
             // Include variables for each server
-            $variables = array(
-                'ubar_eastward, vbar_northward',
-                'u_sur_eastward, v_sur_northward',
-                'zeta', 'Hwave',
-                'temp_sur', 'salt_sur'
-            );
+            $variables = array();
             $existingServers[] = array("id" => $index, "name" => $serverName, "url" => $serverURL, "variables" => $variables);
         }
+        $existingServers = extractVariablesFromLayers($xml, $existingServers);
 
         header('Content-Type: application/json');
         echo json_encode($existingServers);
@@ -57,14 +76,10 @@ if (isset($_GET['loadedCode'])) {
             $serverURL = (string)$server->url;
 
             // Include variables for each server
-            $variables = array(
-                'ubar_eastward, vbar_northward',
-                'u_sur_eastward, v_sur_northward',
-                'zeta', 'Hwave',
-                'temp_sur', 'salt_sur'
-            );
+            $variables = array();
             $existingServers[] = array("id" => $index, "name" => $serverName, "url" => $serverURL, "variables" => $variables);
         }
+        $existingServers = extractVariablesFromLayers($xml, $existingServers);
 
         header('Content-Type: application/json');
         echo json_encode($existingServers);

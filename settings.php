@@ -7,7 +7,7 @@
 
     <style>
         /* Customize text input box */
-
+        
         html, body {
             height: 100%;
             margin: 0;
@@ -157,7 +157,7 @@
 
 <!-- Your settings form goes here -->
 
-<form action="save_config.php" method="post" onsubmit="return inspectAndSubmit()">
+<form action="save_config.php" method="post" onsubmit="return inspectAndSubmit(event)">
 
     <?php
     // Load the content of confHurricanes.xml for editing
@@ -183,15 +183,19 @@
             echo '<div class="variables-container">';
              // Add heading for variables
 
-            $variables = array(
+            $selectedVariables = $server['variables'] ?? array();  ///changed here
+
+            $allVariables = array(
                 'ubar_eastward, vbar_northward',
                 'u_sur_eastward, v_sur_northward',
                 'zeta', 'Hwave',
                 'temp_sur', 'salt_sur'
             );
         
-            foreach ($variables as $variable) {
-                echo '<label><input type="checkbox" name="variables[' . htmlspecialchars($server['name']) . '][]" value="' . $variable . '"> ' . $variable . '</label>';
+        
+            foreach ($allVariables as $variable) {
+                $isChecked = in_array($variable, $selectedVariables);
+                echo '<label><input type="checkbox" name="variables[' . htmlspecialchars($server['name']) . '][]" value="' . $variable . '" ' . ($isChecked ? 'checked' : '') . '> ' . $variable . '</label>';
             }
             echo '</div>';
 
@@ -214,6 +218,7 @@
 
 <script>
     function addServer() {
+    console.log('Adding a new server...');
     var container = document.getElementById('servers-container');
     var newServerInput = document.createElement('div');
     newServerInput.className = 'server-input';
@@ -305,14 +310,69 @@ function createCheckbox(serverUrl, variableNames, index) {
     label.appendChild(document.createTextNode(` ${variableNames.join(', ')}`));
 
     return label;
+ }
+
+
+// Initialize the array to store deleted servers
+var deletedServers = [];
+
+function removeServer(element) {
+    var container = document.getElementById('servers-container');
+    var serverInput = element.parentNode;
+    container.removeChild(serverInput);
+
+    // Get the server name
+    var serverName = serverInput.querySelector('input[name^="server_names"]').value;
+    // Add the server name to the array of deleted servers
+    deletedServers.push(serverName);
+}
+
+// Modify the form submission logic
+// Modify the form submission logic
+function inspectAndSubmit(event) {
+    //event.preventDefault(); // Prevent the default form submission behavior
+
+    // Set the deleteServer parameter in the form for all deleted servers
+    var form = document.querySelector('form');
+     
+    // Create a hidden input field to store the deleted servers
+    var deleteServerInput = document.createElement('input');
+    deleteServerInput.type = 'hidden';
+    deleteServerInput.name = 'deleteServer';
+    deleteServerInput.value = JSON.stringify(deletedServers);
+    form.appendChild(deleteServerInput);
+
+    // Include selected variables for each server
+    var serverInputs = document.querySelectorAll('.server-input');
+    serverInputs.forEach(function(serverInput, index) {
+        var serverName = serverInput.querySelector('input[name^="server_names"]').value;
+        var selectedVariables = [];
+        var checkboxes = serverInput.querySelectorAll('input[type="checkbox"]:checked');
+        checkboxes.forEach(function(checkbox) {
+            selectedVariables.push(checkbox.value);
+        });
+        var variablesInput = document.createElement('input');
+        variablesInput.type = 'hidden';
+        variablesInput.name = 'server_variables[' + serverName + ']';
+        variablesInput.value = JSON.stringify(selectedVariables);
+        form.appendChild(variablesInput);
+    });
+
+    // Log the form data to the console
+    var formData = new FormData(form);
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+
+
 }
 
 
-    function removeServer(element) {
-        var container = document.getElementById('servers-container');
-        var serverInput = element.parentNode;
-        container.removeChild(serverInput);
-    }
+
+
+
+
+
 
     function populateServers(existingServers) {
     var container = document.getElementById('servers-container');
@@ -327,16 +387,8 @@ function createCheckbox(serverUrl, variableNames, index) {
         
         var variablesContainer = '<div class="variables-container">';
         
-        var variables = [
-            'ubar_eastward, vbar_northward',
-            'u_sur_eastward, v_sur_northward',
-            'zeta', 'Hwave',
-            'temp_sur', 'salt_sur'
-        ];
-
-        // Add checkboxes for each variable
-        variables.forEach(function (variable) {
-            var isChecked = server.variables.includes(variable);
+        server.variables.forEach(function (variable) {
+            var isChecked = true; // Initialize as true if the variable exists in server.variables
             variablesContainer += '<label><input type="checkbox" name="variables[' + server.name + '][]" value="' + variable + '" ' + (isChecked ? 'checked' : '') + '> ' + variable + '</label>';
         });
 
@@ -349,13 +401,6 @@ function createCheckbox(serverUrl, variableNames, index) {
         container.appendChild(newServerInput);
     });
 }
-
-
-
-
-
-
-
 
 function fetchVariables() {
     fetch('extract_variables.php')
