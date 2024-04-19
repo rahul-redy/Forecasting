@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    //sleep(5);
+    sleep(10);
     // Generate a random code for the filename
     $loadedCode = isset($_POST['loadedCode']) ? $_POST['loadedCode'] : null;
 
@@ -26,7 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Handle server deletion
-    // Handle server deletion
     if (isset($_POST['deleteServer'])) {
         $deletedServers = json_decode($_POST['deleteServer'], true); // Decode JSON string into array
         foreach ($deletedServers as $serverToDelete) {
@@ -34,11 +33,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-//--------------------------------------------------------------------------
-
     // Handle adding new servers
     $serverNames = $_POST['server_names'];
     $serverURLs = $_POST['server_urls'];
+    $serverVariables = $_POST['server_variables'];
 
     $newServerBlocks = '';
     for ($i = 0; $i < count($serverNames); $i++) {
@@ -53,8 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $insertPosition = strpos($editedConfig, '</opendapservers>');
     $editedConfig = substr_replace($editedConfig, $newServerBlocks, $insertPosition, 0);
 
-//--------------------------------------------------------------------------
-
     // Clear existing layers within <layers> section
     preg_match('/<layers>(.*?)<\/layers>/s', $editedConfig, $matches);
     $layersContent = $matches[1] ?? '';
@@ -64,65 +60,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $editedConfig = str_replace($matches[1], $layersContent, $editedConfig);
     }
 
-    $serverNames = $_POST['server_names'];
-
-
-    $serverVariables = $_POST['server_variables']; // Change to 'server_variables'
-
-
     $newLayerBlocks = '';
     foreach ($serverNames as $name) {
+        $variablesArray = json_decode($serverVariables[$name], true);
 
-            $variablesArray = json_decode($serverVariables[$name], true);
+        if (is_array($variablesArray)) {
+            foreach ($variablesArray as $variable) {
+                $variableProperties = $_POST["variable_properties"][$name][$variable] ?? "{}";
+                $variableProperties = json_decode($variableProperties, true);
 
-            if (is_array($variablesArray)) {
+                $newLayerBlock = "<layer>\n<server>$name</server>\n<servertype>dap</servertype>\n<layertype>{$variableProperties['layertype']}</layertype>\n<gridtype>rho</gridtype>\n<name>$variable</name>\n";
 
-            foreach ($variablesArray as $variable) { // Change to 'serverVariables'
-                $newLayerBlock = "<layer>\n<server>$name</server>\n<servertype>dap</servertype>\n";
-
-                
-                if ($variable == 'Risk') {
-                // Configuration for Risk variable
-                    $newLayerBlock .= "<layertype>dynscatter</layertype>\n<gridtype>LatLon</gridtype>\n<name>$variable</name>\n<varthreshold>12.0</varthreshold>\n<varscale>12.0</varscale>\n<longname>Damage level</longname>\n<shortname>Damage.</shortname>\n<units>m/s</units>\n<colorbar>risk</colorbar>\n<visible>False</visible>\n<transparent>True</transparent>\n";
-                } else {
-                // Configuration for other variables
-                    $newLayerBlock .= "<layertype>dynmap</layertype>\n<gridtype>rho</gridtype>\n<name>$variable</name>\n";
-
-                // Variable-specific configurations
-                    switch ($variable) {
-                        case 'salt_sur':
-                            $newLayerBlock .= "<varthreshold>1110.0</varthreshold>\n<varscale>1.0</varscale>\n<longname>Surface salinity</longname>\n<shortname>SSS</shortname>\n<units></units>\n<colorbar>salinity</colorbar>\n";
-                            break;
-
-                        case 'temp_sur':
-                            $newLayerBlock .= "<varthreshold>1110.0</varthreshold>\n<varscale>1.0</varscale>\n<longname>Surface temperature</longname>\n<shortname>SST</shortname>\n<units>°C</units>\n<colorbar>temperature</colorbar>\n";
-                            break;
-
-                        case 'Hwave':
-                            $newLayerBlock .= "<varthresholdmin>-1.89</varthresholdmin>\n<varthresholdmax>100</varthresholdmax>\n<varscale>1.0</varscale>\n<longname>Wave amplitude</longname>\n<shortname>Hm0</shortname>\n<units>m</units>\n<colorbar>Hm0</colorbar>\n";
-                            break;
-
-                        case 'zeta':
-                            $newLayerBlock .= "<varthresholdmin>-1.89</varthresholdmin>\n<varthresholdmax>100</varthresholdmax>\n<varscale>1.0</varscale>\n<longname>Water level</longname>\n<shortname>Water lvl.</shortname>\n<units>m</units>\n<colorbar>zeta</colorbar>\n";
-                            break;
-
-                        case 'u_sur_eastward,v_sur_northward':
-                            $newLayerBlock .= "<varthreshold>12.0</varthreshold>\n<varscale>12.0</varscale>\n<longname>Surface currents</longname>\n<shortname>Srfc curr</shortname>\n<units>m/s</units>\n<colorbar>velocity</colorbar>\n";
-                            break;
-                    
-                        case 'ubar_eastward, vbar_northward':
-                            $newLayerBlock .= "<varthreshold>12.0</varthreshold>\n<varscale>12.0</varscale>\n<longname>Barotropic velocity</longname>\n<shortname>Barotrop. vel</shortname>\n<units>m/s</units>\n<colorbar>velocity</colorbar>\n";
-                            break;
+                foreach ($variableProperties as $propKey => $propValue) {
+                    if ($propKey !== 'layertype') {
+                        $newLayerBlock .= "<$propKey>$propValue</$propKey>\n";
+                    }
                 }
-            }
 
-            $newLayerBlock .= "<visible>False</visible>\n<transparent>True</transparent>\n</layer>\n";
-            $newLayerBlocks .= $newLayerBlock;
-            
+                $newLayerBlock .= "<visible>False</visible>\n<transparent>True</transparent>\n</layer>\n";
+                $newLayerBlocks .= $newLayerBlock;
+            }
         }
     }
-}
-
 
     // Add the new layer blocks to the configuration
     $insertPosition = strpos($editedConfig, '</layers>');
@@ -136,7 +95,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     file_put_contents($configFile, $editedConfig);
 
     // Redirect the user to the main index page
-    
     if (!$isRandomCode) {
         header("Location: index.html?loadedCode=$loadedCode");
         exit();
