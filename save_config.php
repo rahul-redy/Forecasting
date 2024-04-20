@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    sleep(10);
+
     // Generate a random code for the filename
     $loadedCode = isset($_POST['loadedCode']) ? $_POST['loadedCode'] : null;
 
