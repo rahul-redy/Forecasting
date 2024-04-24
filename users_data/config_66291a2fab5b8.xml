@@ -443,13 +443,7 @@
 
         
 
-        <server>
-            <name>Damage</name>
-            <url>https://icoast.rc.ufl.edu/thredds/dodsC/Noppcoawst/Damage_Forecast/damage_20230827.nc.dods</url>
-            <grid name="LatLon" floatType="float32">Lat,Lon</grid>
-            <!--            Use this exact format for dates  '%YYYY-%mm-%ddT%HH:%MM:%SS.000Z' -->
-            <time offset="1858-11-17T00:00:00.000Z" units="seconds" floatType="float64">ocean_time</time>
-        </server>
+        
 
 
 </opendapservers>
@@ -509,18 +503,22 @@
 
 
 
-    <layer>
+    
+
+
+
+<layer>
 <server>L0</server>
 <servertype>dap</servertype>
 <layertype>dynmap</layertype>
 <gridtype>rho</gridtype>
-<name>temp_sur</name>
+<name>zeta</name>
 <varthreshold>1000.0</varthreshold>
 <varscale>1.0</varscale>
-<longname>new</longname>
-<shortname>NA</shortname>
+<longname>new long name</longname>
+<shortname>new</shortname>
 <units>NA</units>
-<colorbar>temperature</colorbar>
+<colorbar>zeta</colorbar>
 <visible>False</visible>
 <transparent>True</transparent>
 </layer>
@@ -529,13 +527,13 @@
 <servertype>dap</servertype>
 <layertype>dynmap</layertype>
 <gridtype>rho</gridtype>
-<name>salt_sur</name>
+<name>Hwave</name>
 <varthreshold>1000.0</varthreshold>
 <varscale>1.0</varscale>
-<longname>ddfdf</longname>
-<shortname>NA</shortname>
-<units>NA</units>
-<colorbar>salinity</colorbar>
+<longname>Wave amplitude</longname>
+<shortname>Hm0</shortname>
+<units>enter units here</units>
+<colorbar>Hm0</colorbar>
 <visible>False</visible>
 <transparent>True</transparent>
 </layer>
@@ -544,28 +542,28 @@
 <servertype>dap</servertype>
 <layertype>dynmap</layertype>
 <gridtype>rho</gridtype>
-<name>u_sur_eastward,v_sur_northward</name>
+<name>Hwave</name>
 <varthreshold>1000.0</varthreshold>
 <varscale>1.0</varscale>
-<longname>NA</longname>
-<shortname>NA</shortname>
-<units>NA</units>
-<colorbar>velocity</colorbar>
+<longname>Wave amplitude</longname>
+<shortname>Hm0</shortname>
+<units>enter units here</units>
+<colorbar>Hm0</colorbar>
 <visible>False</visible>
 <transparent>True</transparent>
 </layer>
 <layer>
-<server>Damage</server>
+<server>L1 GOMSAB</server>
 <servertype>dap</servertype>
 <layertype>dynmap</layertype>
 <gridtype>rho</gridtype>
-<name>Risk</name>
+<name>salt_sur</name>
 <varthreshold>1000.0</varthreshold>
 <varscale>1.0</varscale>
-<longname>Nrisk</longname>
-<shortname>NA</shortname>
-<units>NA</units>
-<colorbar>bathy</colorbar>
+<longname>Surface salinity</longname>
+<shortname>SSS</shortname>
+<units>enter units here</units>
+<colorbar>salinity</colorbar>
 <visible>False</visible>
 <transparent>True</transparent>
 </layer>

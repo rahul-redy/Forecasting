@@ -431,7 +431,13 @@
             <time offset="1858-11-17T00:00:00.000Z" units="seconds" floatType="float64">ocean_time</time>
         </server>
 
-        
+        <server>
+            <name>L1 GOMSAB</name>
+            <url>https://icoast.rc.ufl.edu/thredds/dodsC/Noppcoawst/L1_Forecast/qck/L1_GOMSAB_qck_20230827.nc.dods</url>
+            <grid name="rho" floatType="float64">lat_rho,lon_rho</grid>
+            <!--            Use this exact format for dates  '%YYYY-%mm-%ddT%HH:%MM:%SS.000Z' -->
+            <time offset="1858-11-17T00:00:00.000Z" units="seconds" floatType="float64">ocean_time</time>
+        </server>
 
         
 
@@ -502,13 +508,73 @@
 <servertype>dap</servertype>
 <layertype>dynmap</layertype>
 <gridtype>rho</gridtype>
-<name>Hwave</name>
-<varthreshold>1200.0</varthreshold>
+<name>zeta</name>
+<varthreshold>1000.0</varthreshold>
 <varscale>1.0</varscale>
-<longname>hello</longname>
-<shortname>meme</shortname>
+<longname>Water level</longname>
+<shortname>Water lvl.</shortname>
+<units>m</units>
+<colorbar>zeta</colorbar>
+<visible>False</visible>
+<transparent>True</transparent>
+</layer>
+<layer>
+<server>L0</server>
+<servertype>dap</servertype>
+<layertype>dynmap</layertype>
+<gridtype>rho</gridtype>
+<name>salt_sur</name>
+<varthreshold>1000.0</varthreshold>
+<varscale>1.0</varscale>
+<longname>Surface salinity</longname>
+<shortname>SSS</shortname>
+<units></units>
+<colorbar>salinity</colorbar>
+<visible>False</visible>
+<transparent>True</transparent>
+</layer>
+<layer>
+<server>L1 GOMSAB</server>
+<servertype>dap</servertype>
+<layertype>dynmap</layertype>
+<gridtype>rho</gridtype>
+<name>zeta</name>
+<varthreshold>1000.0</varthreshold>
+<varscale>1.0</varscale>
+<longname>Water level</longname>
+<shortname>Water lvl.</shortname>
+<units>m</units>
+<colorbar>zeta</colorbar>
+<visible>False</visible>
+<transparent>True</transparent>
+</layer>
+<layer>
+<server>L1 GOMSAB</server>
+<servertype>dap</servertype>
+<layertype>dynmap</layertype>
+<gridtype>rho</gridtype>
+<name>Hwave</name>
+<varthreshold>1000.0</varthreshold>
+<varscale>1.0</varscale>
+<longname>Wave amplitude</longname>
+<shortname>Hm0</shortname>
 <units>m</units>
 <colorbar>Hm0</colorbar>
+<visible>False</visible>
+<transparent>True</transparent>
+</layer>
+<layer>
+<server>L1 GOMSAB</server>
+<servertype>dap</servertype>
+<layertype>dynmap</layertype>
+<gridtype>rho</gridtype>
+<name>temp_sur</name>
+<varthreshold>1000.0</varthreshold>
+<varscale>1.0</varscale>
+<longname>Surface temperature</longname>
+<shortname>SST</shortname>
+<units>°C</units>
+<colorbar>temperature</colorbar>
 <visible>False</visible>
 <transparent>True</transparent>
 </layer>

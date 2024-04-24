@@ -202,7 +202,6 @@
                 echo '<input type="checkbox" name="variables[' . htmlspecialchars($server['name']) . '][]" value="' . $variable . '" ' . ($isChecked ? 'checked' : '') . '> ' . $variable;
                 echo '<button type="button" class="edit-variable-btn" onclick="toggleOptionsContainer(this)">Edit</button>';
                 echo '</label>';
-                
                 echo '</div>';
             }
             echo '</div>';
@@ -399,22 +398,56 @@ function getDefaultProperties(variableName) {
         "layertype": "dynmap",
         "varthreshold": "1000.0",
         "varscale": "1.0",
-        "longname": "NA",
-        "shortname": "NA",
-        "units": "NA",
+        "longname": "Enter a longname here",
+        "shortname": "Enter a shortname here",
+        "units": "enter units here",
         "colorbar": "zeta"
     };
 
-    // Override default properties as needed
+    // Override default properties based on variableName
     switch (variableName) {
+        case 'u_sur_eastward, v_sur_northward':
+            defaultProperties.colorbar = "velocity";
+            defaultProperties.longname = "Srfc. curr.";
+            defaultProperties.shortname = "Surface currents";
+            defaultProperties.units = "m/s";
+            break;
+        case 'zeta':
+            defaultProperties.longname = "Water level";
+            defaultProperties.shortname = "Water lvl.";
+            defaultProperties.units = "m";
+            break;
+        case 'Hwave':
+            defaultProperties.colorbar = "Hm0";
+            defaultProperties.longname = "Wave amplitude";
+            defaultProperties.shortname = "Hm0";
+            defaultProperties.units = "m";
+            break;
+        case 'Risk':
+            defaultProperties.colorbar = "zeta";
+            defaultProperties.longname = "Damage level";
+            defaultProperties.shortname = "Damage";
+            defaultProperties.units = "m/s";
+            break;
+        case 'temp_sur':
+            defaultProperties.colorbar = "temperature";
+            defaultProperties.longname = "Surface temperature";
+            defaultProperties.shortname = "SST";
+            defaultProperties.units = "°C";
+            break;
         case 'salt_sur':
-            defaultProperties.colorbar = "salt";
+            defaultProperties.colorbar = "salinity";
+            defaultProperties.longname = "Surface salinity";
+            defaultProperties.shortname = "SSS";
+            defaultProperties.units = "";
             break;
         // Add more cases as needed
     }
 
+
     return defaultProperties;
 }
+
     // Call the fetch function on page load
     window.onload = function () {
         fetchVariables();
@@ -478,16 +511,16 @@ function getDefaultProperties(variableName) {
         var variablesContainer = '<div class="variables-container">';
 
         server.variables.forEach(function (variable) {
-            var isChecked = false; // Initialize as true if the variable exists in server.variables
-            variablesContainer += '<div>';
-            variablesContainer += '<label>';
-            variablesContainer += '<input type="checkbox" name="variables[' + server.name + '][]" value="' + variable + '" ' + (isChecked ? 'checked' : '') + '> ' + variable;
-            variablesContainer += '<button type="button" class="edit-variable-btn">Edit Properties</button>'; // Removed inline onclick attribute
-            variablesContainer += '</label>';
-            
+    var isChecked = false; // Initialize as true if the variable exists in server.variables
+    var defaultProperties = getDefaultProperties(variable); // Get default properties for the variable
+    variablesContainer += '<div>';
+    variablesContainer += '<label>';
+    variablesContainer += '<input type="checkbox" name="variables[' + server.name + '][]" value="' + variable + '" ' + (isChecked ? 'checked' : '') + '> ' + variable;
+    variablesContainer += '<button type="button" class="edit-variable-btn">Edit Properties</button>'; // Removed inline onclick attribute
+    variablesContainer += '</label>';
+    variablesContainer += '</div>';
+});
 
-            variablesContainer += '</div>';
-        });
 
         variablesContainer += '</div>';
         
@@ -537,17 +570,17 @@ function getDefaultProperties(variableName) {
 
     // Longname
     var longnameInput = document.createElement('li');
-    longnameInput.innerHTML = '<label>Longname: <input type="text" name="longname" value="NA"></label>';
+    longnameInput.innerHTML = '<label>Longname: <input type="text" name="longname" value="Enter a longname here"></label>';
     optionsList.appendChild(longnameInput);
 
     // Shortname
     var shortnameInput = document.createElement('li');
-    shortnameInput.innerHTML = '<label>Shortname: <input type="text" name="shortname" value="NA"></label>';
+    shortnameInput.innerHTML = '<label>Shortname: <input type="text" name="shortname" value="Enter a shortname here"></label>';
     optionsList.appendChild(shortnameInput);
 
     // Units
     var unitsInput = document.createElement('li');
-    unitsInput.innerHTML = '<label>Units: <input type="text" name="units" value="NA"></label>';
+    unitsInput.innerHTML = '<label>Units: <input type="text" name="units" value="enter units here"></label>';
     optionsList.appendChild(unitsInput);
 
     // Colorbar
@@ -608,16 +641,6 @@ function saveProperties(optionsList, button) {
     // Log the saved properties to the console
     console.log('Saved properties for variable', variableName + ' in server ' + serverName + ':', properties);
 }
-
-
-
-
-
-
-
-
-
-
 
 
 function toggleOptionsContainer(button) {

@@ -503,31 +503,64 @@
 
 
 
-    <layer>
+<layer>
+<server>L0</server>
+<servertype>dap</servertype>
+<layertype>dynmap</layertype>
+<gridtype>rho</gridtype>
+<name>zeta</name>
+<varthreshold>1000.0</varthreshold>
+<varscale>1.0</varscale>
+<longname>zet</longname>
+<shortname>a</shortname>
+<units>NA</units>
+<colorbar>zeta</colorbar>
+<visible>False</visible>
+<transparent>True</transparent>
+</layer>
+
+<layer>
 <server>L0</server>
 <servertype>dap</servertype>
 <layertype>dynmap</layertype>
 <gridtype>rho</gridtype>
 <name>temp_sur</name>
-<varthreshold>1200.0</varthreshold>
+<varthreshold>1000.0</varthreshold>
 <varscale>1.0</varscale>
-<longname>surfaace temo</longname>
-<shortname>surface</shortname>
-<units>C</units>
+<longname>zet</longname>
+<shortname>a</shortname>
+<units>NA</units>
 <colorbar>temperature</colorbar>
 <visible>False</visible>
 <transparent>True</transparent>
 </layer>
+
+<layer>
+<server>L1 GOMSAB</server>
+<servertype>dap</servertype>
+<layertype>dynmap</layertype>
+<gridtype>rho</gridtype>
+<name>zeta</name>
+<varthreshold>1000.0</varthreshold>
+<varscale>1.0</varscale>
+<longname>zet</longname>
+<shortname>a</shortname>
+<units>NA</units>
+<colorbar>zeta</colorbar>
+<visible>False</visible>
+<transparent>True</transparent>
+</layer>
+
 <layer>
 <server>L1 GOMSAB</server>
 <servertype>dap</servertype>
 <layertype>dynmap</layertype>
 <gridtype>rho</gridtype>
 <name>salt_sur</name>
-<varthreshold>10200.0</varthreshold>
+<varthreshold>1000.0</varthreshold>
 <varscale>1.0</varscale>
-<longname>NA</longname>
-<shortname>NA</shortname>
+<longname>salt</longname>
+<shortname>a</shortname>
 <units>NA</units>
 <colorbar>salinity</colorbar>
 <visible>False</visible>
