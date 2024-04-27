@@ -9,19 +9,20 @@
 
     <style>
         /* Customize text input box */
-        
-
         html, body {
             height: 100%;
             margin: 0;
             padding: 0;
         }
+
         h1, h2 {
             font-family: 'Anton', sans-serif; /* Use Anton font for titles */
         }
+
         h1 {
         text-align: center; /* Center-align the configuration title */
-    }
+        }
+
         body {
             background-image: url('sky2.jpeg'); /* Set background image */
             /*background-color: #f1f3f1; */
@@ -80,8 +81,7 @@
         .remove-server img {
     width: 16px; /* Adjust width as needed */
     height: 16px; /* Adjust height as needed */
-    cursor: pointer; /* Add pointer cursor to indicate clickable element */
-}
+    cursor: pointer; /* Add pointer cursor to indicate clickable element */}
 
         .remove-server:hover {
             color: red; /* Change color on hover */
@@ -90,7 +90,7 @@
         label {
         display: block;
         margin-bottom: 10px; /* Add margin bottom to create a gap between label elements */
-    }
+        }
 
 
         .variables-container {
@@ -100,7 +100,7 @@
             padding: 10px;
             margin-top: 10px;
             max-height: 200px; /* Set a maximum height for the container */
-            overflow-y: auto; /* Enable vertical scrolling if content exceeds the maximum height */
+            overflow-y: auto; /* Enable vertical scrolling if content exceeds the maximum height */ 
         }
 
         .variables-container label {
@@ -115,29 +115,29 @@
         }
 
         .hover-container {
-    position: absolute;
-    top: 0px; /* Adjust top position */
-    right: 0px; /* Adjust right position */
-    background-color: #333; /* Set transparency to 50% */
-    border: 1px solid #ccc;
-    padding: 10px;
-    z-index: 1;
-    display: block; /* Display by default */
-}
+        position: absolute;
+        top: 0px; /* Adjust top position */
+        right: 0px; /* Adjust right position */
+        background-color: #333; /* Set transparency to 50% */
+        border: 1px solid #ccc;
+        padding: 10px;
+        z-index: 1;
+        display: block; /* Display by default */
+        }
 
-.server-input:hover .hover-container {
-    display: block; /* Display on hover */
-}
+    .server-input:hover .hover-container {
+        display: block; /* Display on hover */
+    }
 
-        .edit-variable-btn {
-    background-color: #fff; /* White background color */
-    color: #333; /* Text color */
-    border: 1px solid #333; /* Add border */
-    padding: 2px 4px; /* Adjust padding */
-    font-size: 10px; /* Adjust font size */
-    border-radius: 5px; /* Add border-radius for rounded corners */
-    cursor: pointer;
-}
+    .edit-variable-btn {
+        background-color: #fff; /* White background color */
+        color: #333; /* Text color */
+        border: 1px solid #333; /* Add border */
+        padding: 2px 4px; /* Adjust padding */
+        font-size: 10px; /* Adjust font size */
+        border-radius: 5px; /* Add border-radius for rounded corners */
+        cursor: pointer;
+    }
 
 
     .save-button {
@@ -197,10 +197,13 @@
 
             foreach ($allVariables as $variable) {
                 $isChecked = in_array($variable, $selectedVariables);
+
+
+                
                 echo '<div>';
                 echo '<label>';
                 echo '<input type="checkbox" name="variables[' . htmlspecialchars($server['name']) . '][]" value="' . $variable . '" ' . ($isChecked ? 'checked' : '') . '> ' . $variable;
-                echo '<button type="button" class="edit-variable-btn" onclick="toggleOptionsContainer(this)">Edit</button>';
+                echo '<button type="button" class="edit-variable-btn" onclick="toggleOptionsContainer(this)">Edit Properties</button>';
                 echo '</label>';
                 echo '</div>';
             }
@@ -225,59 +228,63 @@
 </div>
 
 <script>
-    function addServer() {
-        console.log('Adding a new server...');
-        var container = document.getElementById('servers-container');
-        var newServerInput = document.createElement('div');
-        newServerInput.className = 'server-input';
+function addServer() {
+    console.log('Adding a new server...');
+    var container = document.getElementById('servers-container');
+    var newServerInput = document.createElement('div');
+    newServerInput.className = 'server-input';
 
-        // Initialize variables for the new server
-        var serverNameInput = '<label>Server Name: <input type="text" name="server_names[]" value=""></label>';
-        var serverUrlInput = '<label>URL: <input type="text" name="server_urls[]" onchange="fetchServerVariables(this)" value=""></label>';
+    // Initialize variables for the new server
+    var serverNameInput = '<label>Server Name: <input type="text" name="server_names[]" value=""></label>';
+    var serverUrlInput = '<label>URL: <input type="text" name="server_urls[]" onchange="fetchServerVariables(this)" value=""></label>';
 
-        var variablesContainer = '<div class="variables-container" id="variables-container-new"></div>'; // Container for variables
+    // Get the default variables
+    var allVariables = [
+        'ubar_eastward, vbar_northward',
+        'u_sur_eastward, v_sur_northward',
+        'zeta',
+        'Hwave',
+        'temp_sur',
+        'salt_sur'
+    ];
 
-        // Add server inputs and variables to the new server div
-        newServerInput.innerHTML = serverNameInput + serverUrlInput + variablesContainer +
-            '<span class="remove-server" onclick="removeServer(this)"><img src="remove.png" alt="Remove"></span>';
+    var variablesContainer = '<div class="variables-container">';
+    allVariables.forEach(function (variable) {
+        variablesContainer += '<div>';
+        variablesContainer += '<label>';
+        variablesContainer += '<input type="checkbox" name="variables[]" value="' + variable + '"> ' + variable;
+        variablesContainer += '<button type="button" class="edit-variable-btn" onclick="handleEditProperties(this)">Edit Properties</button>';
+        variablesContainer += '</label>';
+        variablesContainer += '</div>';
+    });
+    variablesContainer += '</div>';
 
-        container.appendChild(newServerInput);
+    // Add server inputs and variables to the new server div
+    newServerInput.innerHTML = serverNameInput + serverUrlInput + variablesContainer +
+        '<span class="remove-server" onclick="removeServer(this)"><img src="remove.png" alt="Remove"></span>';
+
+    container.appendChild(newServerInput);
+}
+
+
+
+async function fetchServerVariables(input) {
+    var serverUrl = input.value.trim();
+
+    // Check if the server URL field is empty
+    if (serverUrl === '') {
+        console.log('Server URL is empty.');
+        return;
     }
 
-    async function fetchServerVariables(input) {
-        var serverUrl = input.value.trim();
-
-        if (serverUrl === '') {
-            console.log('Server URL is empty.');
-            return;
-        }
-
-        // Convert .dods to .dds for fetching variables
-        var convertedUrlForFetch = serverUrl.replace(/\.dods$/, '.dds');
-
-        try {
-            console.log('Fetching variables for URL:', convertedUrlForFetch);
-            var response = await fetch(`extract_variables.php?url=${encodeURIComponent(convertedUrlForFetch)}`);
-
-            if (!response.ok) {
-                throw new Error(`Failed to fetch variables. Status: ${response.status} ${response.statusText}`);
-            }
-
-            var contentType = response.headers.get('content-type');
-            if (contentType && contentType.indexOf('application/json') !== -1) {
-                var variables = await response.json();
-                console.log('Fetched variables:', variables);
-
-                // Convert .dds back to .dods for displaying checkboxes
-                var convertedUrlForCheckboxes = convertedUrlForFetch.replace(/\.dds$/, '.dods');
-                updateVariablesContainer(convertedUrlForCheckboxes, variables);
-            } else {
-                throw new Error('Invalid content type in response. Expected JSON.');
-            }
-        } catch (error) {
-            console.error('Error fetching server variables:', error.message);
-        }
+    // Fetch variables only if the URL field is empty
+    try {
+        // Your fetch logic here...
+    } catch (error) {
+        console.error('Error fetching server variables:', error.message);
     }
+}
+
 
     function updateVariablesContainer(serverUrl, variables) {
         var serverContainers = document.getElementsByClassName('server-input');
@@ -408,8 +415,8 @@ function getDefaultProperties(variableName) {
     switch (variableName) {
         case 'u_sur_eastward, v_sur_northward':
             defaultProperties.colorbar = "velocity";
-            defaultProperties.longname = "Srfc. curr.";
-            defaultProperties.shortname = "Surface currents";
+            defaultProperties.longname = "Surface currents";
+            defaultProperties.shortname = "Srfc. curr.";
             defaultProperties.units = "m/s";
             break;
         case 'zeta':
@@ -440,6 +447,12 @@ function getDefaultProperties(variableName) {
             defaultProperties.longname = "Surface salinity";
             defaultProperties.shortname = "SSS";
             defaultProperties.units = "";
+            break;
+        case 'ubar_eastward, vbar_northward':
+            defaultProperties.colorbar = "velocity";
+            defaultProperties.longname = "Barotropic velocity";
+            defaultProperties.shortname = "Barotrop. vel.";
+            defaultProperties.units = "m/s";
             break;
         // Add more cases as needed
     }
@@ -500,6 +513,17 @@ function getDefaultProperties(variableName) {
     function populateServers(existingServers) {
     var container = document.getElementById('servers-container');
 
+    // Define all available variables
+    var allVariables = [
+        'ubar_eastward, vbar_northward',
+        'u_sur_eastward, v_sur_northward',
+        'zeta',
+        'Hwave',
+        'temp_sur',
+        'salt_sur',
+        'Risk'
+    ];
+
     existingServers.forEach(function (server) {
         var newServerInput = document.createElement('div');
         newServerInput.className = 'server-input';
@@ -510,20 +534,18 @@ function getDefaultProperties(variableName) {
 
         var variablesContainer = '<div class="variables-container">';
 
-        server.variables.forEach(function (variable) {
-    var isChecked = false; // Initialize as true if the variable exists in server.variables
-    var defaultProperties = getDefaultProperties(variable); // Get default properties for the variable
-    variablesContainer += '<div>';
-    variablesContainer += '<label>';
-    variablesContainer += '<input type="checkbox" name="variables[' + server.name + '][]" value="' + variable + '" ' + (isChecked ? 'checked' : '') + '> ' + variable;
-    variablesContainer += '<button type="button" class="edit-variable-btn">Edit Properties</button>'; // Removed inline onclick attribute
-    variablesContainer += '</label>';
-    variablesContainer += '</div>';
-});
-
+        // Iterate through all available variables
+        allVariables.forEach(function (variable) {
+            var isChecked = server.variables.includes(variable);
+            variablesContainer += '<div>';
+            variablesContainer += '<label>';
+            variablesContainer += '<input type="checkbox" name="variables[' + server.name + '][]" value="' + variable + '" ' + (isChecked ? 'checked' : '') + '> ' + variable;
+            variablesContainer += '<button type="button" class="edit-variable-btn">Edit Properties</button>'; // Removed inline onclick attribute
+            variablesContainer += '</label>';
+            variablesContainer += '</div>';
+        });
 
         variablesContainer += '</div>';
-        
 
         // Add server inputs and variables to the new server div
         newServerInput.innerHTML = serverNameInput + serverUrlInput + variablesContainer +
@@ -543,9 +565,31 @@ function getDefaultProperties(variableName) {
 }
 
 
+function handleEditProperties(button) {
+    var serverName = button.closest('.server-input').querySelector('input[name^="server_names"]').value;
+    var variableName = button.parentNode.querySelector('input[type="checkbox"]').value;
+
+    // Check if options container already exists
+    var optionsContainer = button.parentNode.querySelector('.options-container');
+    if (optionsContainer) {
+        // If exists, toggle its display
+        if (optionsContainer.style.display === 'block') {
+            optionsContainer.style.display = 'none';
+        } else {
+            optionsContainer.style.display = 'block';
+        }
+    } else {
+        // If doesn't exist, add options container
+        addOptionsContainer(button, serverName, variableName);
+    }
+}
 
 
-    function addOptionsContainer(button) {
+
+
+
+
+function addOptionsContainer(button, serverName, variableName) {
     // Create a new container for options
     var optionsContainer = document.createElement('div');
     optionsContainer.className = 'options-container';
@@ -595,7 +639,7 @@ function getDefaultProperties(variableName) {
     saveButton.textContent = 'Save';
     saveButton.className = 'save-button'; // Add a class for styling
     saveButton.onclick = function () {
-        saveProperties(optionsList, button);
+        saveProperties(optionsList, serverName, variableName);
     };
     optionsContainer.appendChild(saveButton);
 
@@ -605,14 +649,9 @@ function getDefaultProperties(variableName) {
 
 
 
-function saveProperties(optionsList, button) {
+function saveProperties(optionsList, serverName, variableName) {
     // Get the variable name associated with the button
-    var variableName = button.parentNode.querySelector('input[type="checkbox"]').value;
-    var serverName = button.closest('.server-input').querySelector('input[name^="server_names"]').value;
-
-    // Check if properties already exist for this variable and server
-    var existingPropertiesInput = button.parentNode.querySelector('input[name^="variable_properties[' + serverName + '][' + variableName + ']"]');
-    var properties = existingPropertiesInput ? JSON.parse(existingPropertiesInput.value) : {};
+    var properties = {};
 
     // Iterate through input fields and update the properties
     optionsList.querySelectorAll('input, select').forEach(function(input) {
@@ -620,23 +659,17 @@ function saveProperties(optionsList, button) {
     });
 
     // Close options container
-    var optionsContainer = button.parentNode.querySelector('.options-container');
+    var optionsContainer = optionsList.parentNode;
     if (optionsContainer) {
         optionsContainer.remove();
     }
 
     // Update or create the hidden input field with the serialized properties
-    var hiddenInput;
-    if (existingPropertiesInput) {
-        existingPropertiesInput.value = JSON.stringify(properties);
-        hiddenInput = existingPropertiesInput;
-    } else {
-        hiddenInput = document.createElement('input');
-        hiddenInput.type = 'hidden';
-        hiddenInput.name = 'variable_properties[' + serverName + '][' + variableName + ']';
-        hiddenInput.value = JSON.stringify(properties);
-        button.parentNode.appendChild(hiddenInput);
-    }
+    var hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'variable_properties[' + serverName + '][' + variableName + ']';
+    hiddenInput.value = JSON.stringify(properties);
+    document.querySelector('form').appendChild(hiddenInput);
 
     // Log the saved properties to the console
     console.log('Saved properties for variable', variableName + ' in server ' + serverName + ':', properties);
